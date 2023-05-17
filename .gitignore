@@ -1,0 +1,5 @@
+node_modules
+.env
+fly-wireguard.conf
+.creds
+postgres_data
