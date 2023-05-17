@@ -1,0 +1,10 @@
+fly.toml
+Dockerfile
+dev.Dockerfile
+.dockerignore
+node_modules
+.git
+fly-wireguard.conf
+.creds
+dev.Dockerfile
+docker-compose.dev.yml

@@ -1,0 +1,27 @@
+services:
+  postgres:
+    image: postgres
+    ports: 
+      - 5432:5432
+    environment:
+      POSTGRES_PASSWORD: pM1DNvBD9ThRumx
+    volumes: 
+      - postgres_data:/var/lib/postgresql/data
+    container_name: postgres
+  blog-list-backend:
+    image: blog-list-backend-dev
+    build:
+      context: .
+      dockerfile: dev.Dockerfile
+    volumes:
+      - ./:/usr/src/app
+      - /usr/src/app/node_modules
+    ports:
+      - 3001:3001
+    container_name: blog-list-backend-dev
+    depends_on: 
+      - postgres
+    
+volumes:
+  postgres_data:
+
