@@ -1,43 +1,21 @@
 const express = require('express')
 const app = express()
 
-const sequelize = require('./models/postgres')
+const { PORT } = require('./utils/config')
+const { connectToDatabase } = require('./utils/db')
 
-const Blog = require('./models/Blog')
-Blog.sync()
+const notesRouter = require('./controllers/blogs')
 
-app.use(express.json());
+app.use(express.json())
 
-app.get('/api/blogs', async (req, res) => {
-  const blogs = await Blog.findAll()
-  res.json(blogs)
-})
+app.use('/api/blogs', notesRouter)
+app.use(require('./utils/middleware').errorHandler);
 
-app.post('/api/blogs', async (req, res) => {
-  try{
-    const blog = await Blog.create(req.body)
-    res.json(blog)
-  } catch(error){
-    return res.status(400).json({ error })
-  }
-})
+const start = async () => {
+  await connectToDatabase()
+  app.listen(PORT, () => {
+    console.log(`Server running on port ${PORT}`)
+  })
+}
 
-app.delete('/api/blogs/:id', async (req, res) => {
-  const { id } = req.params;
-  try {
-    const blog = await Blog.findByPk(id);
-    if (!blog) {
-      return res.status(404).json({ error: 'Blog not found' });
-    }
-    await blog.destroy();
-    res.json({ message: 'Blog deleted successfully' });
-  } catch (error) {
-    console.error('Unable to delete the blog:', error);
-    res.status(500).json({ error: 'Unable to delete the blog' });
-  }
-});
-
-const PORT = process.env.PORT || 3001
-app.listen(PORT, () => {
-  console.log(`Server running on port ${PORT}`)
-})
+start()

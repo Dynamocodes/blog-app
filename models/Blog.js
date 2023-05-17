@@ -1,5 +1,5 @@
 const { DataTypes, Model } = require('sequelize');
-const sequelize = require('./postgres')
+const { sequelize } = require('../utils/db')
 
 class Blog extends Model {}
 Blog.init({

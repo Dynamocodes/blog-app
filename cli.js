@@ -1,7 +1,7 @@
 require('dotenv').config();
 const { DataTypes } = require('sequelize');
-const sequelize = require('./models/postgres.js');
-const Blog = require('./models/Blog');
+const sequelize = require('./utils/db.js');
+const Blog = require('./models/blog.js');
 
 
 
