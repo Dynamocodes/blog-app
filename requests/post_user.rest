@@ -1,0 +1,23 @@
+POST http://localhost:3001/api/users
+content-type: application/json
+
+{
+    "username":"dynamo",
+    "name":"elias hietanen"
+}
+###
+POST http://localhost:3001/api/users
+content-type: application/json
+
+{
+    "username":"dynamo@gmail.com",
+    "name":"elias hietanen"
+}
+###
+POST http://localhost:3001/api/users
+content-type: application/json
+
+{
+    "username":"dynamax",
+    "name":"elias hietanen"
+}
