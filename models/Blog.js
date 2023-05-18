@@ -22,6 +22,32 @@ Blog.init({
   likes: {
     type: DataTypes.INTEGER,
     defaultValue: 0
+  },
+  year_written: {
+    type: DataTypes.INTEGER,
+    allowNull: true,
+    validate: {
+      isGreaterThanOrEqual(value) {
+        return new Promise((resolve, reject) => {
+          const currentYear = new Date().getFullYear();
+          if (value < 1991 || value > currentYear) {
+            reject('Year must be at least 1991 and not greater than the current year');
+          } else {
+            resolve();
+          }
+        });
+      },
+    },
+  },
+  created_at: {
+    type: DataTypes.DATE,
+    allowNull: false,
+    defaultValue: DataTypes.NOW,
+  },
+  updated_at: {
+    type: DataTypes.DATE,
+    allowNull: false,
+    defaultValue: DataTypes.NOW,
   }
 }, {
   sequelize,

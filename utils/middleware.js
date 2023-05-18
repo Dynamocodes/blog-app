@@ -4,7 +4,7 @@ const {SECRET} = require('./config')
 const errorHandler = (error, req, res, next) => {
   console.error(error.message);
 
-  if (error.name === 'SequelizeValidationError') {
+  if ( error.name === 'SequelizeValidationError') {
     const errorMessages = error.errors.map((err) => err.message);
     return res.status(400).json({ error: errorMessages });
   }
@@ -16,12 +16,8 @@ const errorHandler = (error, req, res, next) => {
   return res.status(500).json({ error: 'Internal server error' });
 };
 
-module.exports = errorHandler;
-
-  
 const tokenExtractor = (req, res, next) => {
   const authorization = req.get('authorization')
-  console.log("authorization", authorization)
   if (authorization && authorization.toLowerCase().startsWith('bearer ')) {
     try {
       req.decodedToken = jwt.verify(authorization.substring(7), SECRET)

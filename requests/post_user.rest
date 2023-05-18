@@ -18,6 +18,6 @@ POST http://localhost:3001/api/users
 content-type: application/json
 
 {
-    "username":"dynamax",
+    "username":"dynamax@gmail.com",
     "name":"elias hietanen"
 }

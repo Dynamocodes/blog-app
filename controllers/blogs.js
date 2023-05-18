@@ -1,23 +1,38 @@
 const router = require('express').Router()
-
+const { Op } = require('sequelize');
 const { Blog, User } = require('../models')
 const {tokenExtractor} = require('../utils/middleware')
 
 router.get('/', async (req, res) => {
+  const { search } = req.query;
+
+  // Define the filter condition
+  const filter = search
+    ? {
+        [Op.or]: [
+          { title: { [Op.iLike]: `%${search}%` } },
+          { author: { [Op.iLike]: `%${search}%` } }
+        ]
+      }
+    : {};
+
   const blogs = await Blog.findAll({
     attributes: { exclude: ['userId'] },
     include: {
       model: User,
-      attributes: ['name','username']
-    }
-  })
-  res.json(blogs)
-})
+      attributes: ['name', 'username']
+    },
+    where: filter, // Apply the filter condition
+    order: [['likes', 'DESC']] // Order by likes in descending order
+  });
+
+  res.json(blogs);
+});
 
 router.post('/', tokenExtractor, async (req, res) => {
-  const user = await User.findByPk(req.decodedToken.id)
-  const blog = await Blog.create({...req.body, userId: user.id, date: new Date()})
-  res.json(blog)
+    const user = await User.findByPk(req.decodedToken.id)
+    const blog = await Blog.create({...req.body, userId: user.id})
+    res.json(blog)
 })
 
 router.get('/:id', async (req, res) => {
@@ -55,6 +70,7 @@ router.put('/:id', async (req, res) => {
   }
 
   blog.likes = req.body.likes
+  blog.updated_at = new Date()
   await blog.save()
 
   res.json(blog)

@@ -1,6 +1,15 @@
-PUT http://localhost:3001/api/users/dynamoof
+PUT http://localhost:3001/api/users/dynamo@gmail.com
 Content-Type: application/json
 
 {
     "newUsername": "dynamoof@gmail.com"
+}
+
+###
+
+PUT http://localhost:3001/api/users/dynamoop@gmail.com
+Content-Type: application/json
+
+{
+    "newUsername": "dynamax@gmail.com"
 }

@@ -1,6 +1,6 @@
 const router = require('express').Router()
 
-const { User, Blog } = require('../models')
+const { User, Blog, ReadingLists } = require('../models')
 
 router.get('/', async (req, res) => {
   const users = await User.findAll({
@@ -12,6 +12,53 @@ router.get('/', async (req, res) => {
   res.json(users)
 })
 
+router.get('/:id', async (req, res) => {
+  const { read } = req.query;
+  let where = {};
+
+  if (read !== undefined) {
+    where.isRead = read === 'true';
+  }
+
+  const user = await User.findByPk(req.params.id, {
+    include: [
+      {
+        model: Blog,
+        as: 'readings',
+        through: {
+          model: ReadingLists,
+          as: 'reading_lists', // match the alias in association
+          attributes: ['isRead', 'id'],
+          where,
+        },
+      },
+    ],
+  })
+
+  if (!user) {
+    return res.status(404).json({ error: 'User not found' })
+  }
+
+  const userData = {
+    ...user.toJSON(),
+    readings: user.readings.map((reading) => {
+      const { id, url, title, author, likes, year_written, reading_lists } = reading
+      return {
+        id,
+        url,
+        title,
+        author,
+        likes,
+        year: year_written,
+        readinglists: reading_lists ? [reading_lists] : [],
+      }
+    }),
+  }
+
+  res.json(userData)
+})
+
+
 router.post('/', async (req, res) => {
   try {
     const user = await User.create(req.body)
@@ -21,14 +68,6 @@ router.post('/', async (req, res) => {
   }
 })
 
-router.get('/:id', async (req, res) => {
-  const user = await User.findByPk(req.params.id)
-  if (user) {
-    res.json(user)
-  } else {
-    res.status(404).end()
-  }
-})
 
 router.put('/:username', async (req, res) => {
   const { username } = req.params;
@@ -49,6 +88,7 @@ router.put('/:username', async (req, res) => {
 
     // Update the username and save changes
     user.username = newUsername;
+    user.updated_at = new Date()
     await user.save();
 
     res.json(user);
