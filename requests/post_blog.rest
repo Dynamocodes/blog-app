@@ -22,13 +22,13 @@ content-type: application/json
 }
 ###
 POST http://localhost:3001/api/blogs
-authorization: bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VybmFtZSI6ImR5bmFtb0BnbWFpbC5jb20iLCJpZCI6MSwiaWF0IjoxNjg0NDM2NjI2LCJleHAiOjE2ODQ0NDAyMjZ9.X4-0e4VNZTsZAVndV4ux_kUyhjq6hJRE3PrL_S7kabM
+authorization: bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VybmFtZSI6ImR5bmFtb0BnbWFpbC5jb20iLCJpZCI6MSwiaWF0IjoxNjg0NTExODgxLCJleHAiOjE2ODQ1MTU0ODF9.dF_7cB0BKfu69pa1Rn4Tk6ZLSlD4gr3J4-lisLtYIaA
 content-type: application/json
 
 {
     "author":"elias hietanen",
-    "url":"www.blogzzz.com",
-    "title":"docker and kubernetes",
-    "likes":12,
-    "year_written": 2001
+    "url":"www.blogyblogs.com",
+    "title":"new blog",
+    "likes":41,
+    "year_written": 2013
 }
